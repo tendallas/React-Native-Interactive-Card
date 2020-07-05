@@ -11,7 +11,8 @@ import {
 	TouchableOpacity,
 	LayoutAnimation,
 	Dimensions,
-	TouchableWithoutFeedback
+	TouchableWithoutFeedback,
+	Platform
 } from 'react-native'
 import styles from './InteractiveCardStyle'
 
@@ -179,9 +180,11 @@ export default class InteractiveCard extends Component {
 	}
 
 	close() {
-    this.setState({
-      contentStyles: [].concat(this.content.props.style, this.contentRequiredStyles, {position: 'absolute', top: 0, height: '100%'})
-    })
+		if (Platform.OS === 'android') {
+			this.setState({
+				contentStyles: [].concat(this.content.props.style, this.contentRequiredStyles, {position: 'absolute', top: 0, height: '100%'})
+			})
+		}
 
 		if(this.props.onClose) this.props.onClose(this);
 
@@ -279,10 +282,11 @@ export default class InteractiveCard extends Component {
 			};
 			const contentAnimatableStyles = this.initContentAnimatableStyles(height, width);
 			const overlayAnimatableStyles = this.initOverlayAnimatableStyles(x, y, width, height);
+			const extra = Platform.OS === 'android' ? {position: 'relative', top: -80, height: Dimensions.get("screen").height} : {};
 
 			this.setState({
 				wrapperStyles: [].concat(this.wrapperRequiredStyles, wrapperAnimatableStyles),
-				contentStyles: [].concat(this.content.props.style, this.contentRequiredStyles, {position: 'relative', top: -80, height: Dimensions.get("screen").height}, contentAnimatableStyles),
+				contentStyles: [].concat(this.content.props.style, this.contentRequiredStyles, extra, contentAnimatableStyles),
 				overlayStyles: [].concat(this.overlayRequiredStyles, overlayAnimatableStyles)
 			}, callback);
 
