@@ -138,7 +138,6 @@ export default class InteractiveCard extends Component {
 
 	/* -- Functions -- */
 	open() {
-
 		// To avoid re-rendering
 		if (!this.state.isActive) {
 			this.setState({ isActive: true });
@@ -148,7 +147,7 @@ export default class InteractiveCard extends Component {
 		}
 
 
-		this.containerStyle = [].concat(this.props.style, this.containerRequiredStyle, {zIndex: 2, overflow: 'visible'});
+		this.containerStyle = [].concat(this.props.style, this.containerRequiredStyle, {zIndex: 2, elevation: 2, overflow: 'visible'});
 
 		this.instantVal.setValue(1);
 
@@ -180,6 +179,9 @@ export default class InteractiveCard extends Component {
 	}
 
 	close() {
+    this.setState({
+      contentStyles: [].concat(this.content.props.style, this.contentRequiredStyles, {position: 'absolute', top: 0, height: '100%'})
+    })
 
 		if(this.props.onClose) this.props.onClose(this);
 
@@ -280,7 +282,7 @@ export default class InteractiveCard extends Component {
 
 			this.setState({
 				wrapperStyles: [].concat(this.wrapperRequiredStyles, wrapperAnimatableStyles),
-				contentStyles: [].concat(this.content.props.style, this.contentRequiredStyles, contentAnimatableStyles),
+				contentStyles: [].concat(this.content.props.style, this.contentRequiredStyles, {position: 'relative', top: -80, height: Dimensions.get("screen").height}, contentAnimatableStyles),
 				overlayStyles: [].concat(this.overlayRequiredStyles, overlayAnimatableStyles)
 			}, callback);
 
